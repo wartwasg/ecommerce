@@ -1,6 +1,7 @@
 package ecom.api.categoryModule;
 
 import ecom.api.categoryModule.Category;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
     @PostMapping("/api/admin/category")
-    public ResponseEntity<String> createCategory(@RequestBody Category category){
+    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category){
         categoryService.createCategory(category);
         return ResponseEntity.ok("Category added successfully");
     }
@@ -34,7 +35,7 @@ public class CategoryController {
         return ResponseEntity.ok("Category was deleted successful");
     }
     @PutMapping("/api/admin/category/{uuid}")
-    public ResponseEntity<String> updateCategory(@RequestBody Category category,@PathVariable UUID uuid){
+    public ResponseEntity<String> updateCategory(@Valid @RequestBody Category category, @PathVariable UUID uuid){
         Category updatedCategory = categoryService.updateCategory(category,uuid);
         return ResponseEntity.ok("Successful updated the category to "+updatedCategory);
     }

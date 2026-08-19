@@ -1,12 +1,11 @@
 package ecom.api.categoryModule;
 
+import ecom.api.error.ApiCustomException;
+import ecom.api.error.CategoriesDoesNotExist;
+import ecom.api.error.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,12 +18,24 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        if(categories.isEmpty()){
+           throw new CategoriesDoesNotExist("Categories does not exist please try again later");
+        }
+        else{
+            return categoryRepository.findAll();
+        }
+
     }
 
     @Override
     public void createCategory(Category category) {
-        categoryRepository.save(category);
+        Category categoryOptional = categoryRepository.findByCategoryName(category.getCategoryName());
+        if(categoryOptional == null){
+            categoryRepository.save(category);
+        }else{
+            throw new ApiCustomException("Category Exists, This category cannot be re-added");
+        }
     }
 
     @Override
@@ -32,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService{
         Optional<Category> categoryOptional = categoryRepository.findById(uuid);
 
         Category category = categoryOptional
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("category","CategoryID",uuid,"category","Resource Not found"));
 
         categoryRepository.delete(category);
     }
@@ -43,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService{
         Optional<Category> categoryOptional = categoryRepository.findById(uuid);
 
         Category newCategory = categoryOptional
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("category","CategoryID",uuid,category.getCategoryName(),"Resource Not found"));
         newCategory.setCategoryName(category.getCategoryName());
         categoryRepository.save(newCategory);
         return newCategory;
