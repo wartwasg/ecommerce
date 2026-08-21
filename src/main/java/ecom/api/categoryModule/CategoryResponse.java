@@ -1,6 +1,26 @@
 package ecom.api.categoryModule;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-public record CategoryResponse(List<CategoryDTO> categoryDTOList) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CategoryResponse{
+
+ private List<CategoryDTO> content;
+
+ private Integer pageNumber;
+
+ private Integer pageSize;
+
+ private Integer totalElements;
+
+ private Integer totalPages;
+
+ private boolean lastPage;
+
 }

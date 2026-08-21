@@ -21,18 +21,18 @@ public class GlobalExceptionHandler {
            String message = err.getDefaultMessage();
            result.put(fieldName,message);
         });
-        return ResponseEntity.badRequest().body(result);
+        return new ResponseEntity<>(result,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> resourceNotFoundException(ResourceNotFoundException e){
-        return new  ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    public ResponseEntity<APIResponse> resourceNotFoundException(ResourceNotFoundException e){
+        return new  ResponseEntity<>(new APIResponse(e.getMessage(),"failed"),HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(ApiCustomException.class)
-    public ResponseEntity<String> apiCustomException(ApiCustomException e){
-        return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+    public ResponseEntity<APIResponse> apiCustomException(ApiCustomException e){
+        return new  ResponseEntity<>(new APIResponse(e.getMessage(),"failed"),HttpStatus.CONFLICT);
     }
     @ExceptionHandler(CategoriesDoesNotExist.class)
-    public ResponseEntity<String> categoriesDoesNotExist(CategoriesDoesNotExist e){
-        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    public ResponseEntity<APIResponse> categoriesDoesNotExist(CategoriesDoesNotExist e){
+        return new  ResponseEntity<>(new APIResponse(e.getMessage(),"failed"),HttpStatus.NOT_FOUND);
     }
 }

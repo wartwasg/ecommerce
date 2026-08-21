@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
+    CategoryResponse getAllCategories(Integer pageNumber,Integer pageSize,String sortBy,String orderBy);
 
-    void createCategory(Category category);
+    CategoryDTO createCategory(CategoryDTO category);
 
-    void deleteCategory(UUID uuid);
+    CategoryDTO deleteCategory(UUID uuid);
 
-    Category updateCategory(Category category, UUID uuid);
+    CategoryDTO updateCategory(CategoryDTO category, UUID uuid);
 }
