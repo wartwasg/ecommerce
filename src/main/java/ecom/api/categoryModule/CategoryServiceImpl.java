@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryDTO createCategory(CategoryDTO category) {
-        Category categoryOptional = categoryRepository.findByCategoryName(category.getCategoryName());
+        Category categoryOptional = categoryRepository.findByCategoryName(category.getCategoryName().trim().toLowerCase(Locale.ROOT));
         if(categoryOptional == null){
             Category convertedCategory = modelMapper.map(category,Category.class);
             Category savedCategory = categoryRepository.save(convertedCategory);

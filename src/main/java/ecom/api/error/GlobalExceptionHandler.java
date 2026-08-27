@@ -1,5 +1,6 @@
 package ecom.api.error;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -34,5 +35,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CategoriesDoesNotExist.class)
     public ResponseEntity<APIResponse> categoriesDoesNotExist(CategoriesDoesNotExist e){
         return new  ResponseEntity<>(new APIResponse(e.getMessage(),"failed"),HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<APIResponse> handleDuplicateCategory(
+            DataIntegrityViolationException exception) {
+
+        APIResponse response =
+                new APIResponse("Category already exists", "Failed");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
     }
 }
